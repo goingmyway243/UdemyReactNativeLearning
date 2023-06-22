@@ -9,13 +9,26 @@ export default function StartGameScreen() {
         maxLength={2}
         keyboardType="number-pad"
       />
-      <PrimaryButton>Reset</PrimaryButton>
-      <PrimaryButton>Confirm</PrimaryButton>
+      <View style={styles.buttonContainer}>
+        <View style={styles.primaryButton}>
+          <PrimaryButton>Reset</PrimaryButton>
+        </View>
+        <View style={styles.primaryButton}>
+          <PrimaryButton>Confirm</PrimaryButton>
+        </View>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  buttonContainer: {
+    flexDirection: "row",
+    marginTop: 8,
+  },
+  primaryButton: {
+    flex: 1,
+  },
   inputContainer: {
     backgroundColor: "purple",
     padding: 16,
@@ -23,6 +36,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     borderRadius: 8,
     elevation: 16,
+    alignItems: "center",
   },
   numberInput: {
     height: 50,
