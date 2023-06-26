@@ -7,11 +7,11 @@ export default function Title(props) {
 const styles = StyleSheet.create({
   title: {
     textAlign: "center",
-    color: Colors.accent700,
+    color: "white",
     fontSize: 24,
     fontWeight: "bold",
     borderWidth: 2,
-    borderColor: Colors.accent700,
+    borderColor: "white",
     padding: 16,
   },
 });
