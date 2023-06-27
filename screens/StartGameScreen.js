@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Alert, StyleSheet, TextInput, View } from "react-native";
+import Card from "../components/Card";
 import PrimaryButton from "../components/PrimaryButton";
+import Title from "../components/Title";
 import Colors from "../utils/colors";
 
 export default function StartGameScreen(props) {
@@ -31,44 +33,43 @@ export default function StartGameScreen(props) {
   }
 
   return (
-    <View style={styles.inputContainer}>
-      <TextInput
-        style={styles.numberInput}
-        maxLength={2}
-        keyboardType="number-pad"
-        value={enteredNumber}
-        onChangeText={numberInputChangeHandler}
-      />
-      <View style={styles.buttonContainer}>
-        <View style={styles.primaryButton}>
-          <PrimaryButton onPress={resetNumberHandler}>Reset</PrimaryButton>
+    <View style={styles.screenContainer}>
+      <Title>Guess My Number</Title>
+      <Card title="Enter a number">
+        <TextInput
+          style={styles.numberInput}
+          maxLength={2}
+          keyboardType="number-pad"
+          value={enteredNumber}
+          onChangeText={numberInputChangeHandler}
+        />
+        <View style={styles.buttonContainer}>
+          <View style={styles.primaryButton}>
+            <PrimaryButton onPress={resetNumberHandler}>Reset</PrimaryButton>
+          </View>
+          <View style={styles.primaryButton}>
+            <PrimaryButton onPress={confirmButtonPressHandler}>
+              Confirm
+            </PrimaryButton>
+          </View>
         </View>
-        <View style={styles.primaryButton}>
-          <PrimaryButton onPress={confirmButtonPressHandler}>
-            Confirm
-          </PrimaryButton>
-        </View>
-      </View>
+      </Card>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  screenContainer: {
+    flex: 1,
+    alignItems: "center",
+    marginTop: 100,
+  },
   buttonContainer: {
     flexDirection: "row",
     marginTop: 8,
   },
   primaryButton: {
     flex: 1,
-  },
-  inputContainer: {
-    backgroundColor: Colors.primary600,
-    padding: 16,
-    marginTop: 100,
-    marginHorizontal: 16,
-    borderRadius: 8,
-    elevation: 16,
-    alignItems: "center",
   },
   numberInput: {
     height: 50,
