@@ -20,11 +20,7 @@ let minBoundary = 1;
 let maxBoundary = 100;
 
 export default function GameScreen({ pickedNumber, onGameOver }) {
-  const initialNumber = generateRandomNumber(
-    minBoundary,
-    maxBoundary,
-    pickedNumber
-  );
+  const initialNumber = generateRandomNumber(1, 100, pickedNumber);
   const [guessNumber, setGuessNumber] = useState(initialNumber);
 
   useEffect(() => {
