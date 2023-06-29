@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { Alert, StyleSheet, View } from "react-native";
+import { Alert, FlatList, StyleSheet, Text, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Card from "../components/Card";
 import GuessNumber from "../components/GuessNumber";
 import PrimaryButton from "../components/PrimaryButton";
 import Title from "../components/Title";
+import GuessLogItem from "../components/GuessLogItem";
 
 function generateRandomNumber(min, max, exclude) {
   let rndNumber = Math.floor(Math.random() * (max - min)) + min;
@@ -22,10 +23,16 @@ let maxBoundary = 100;
 export default function GameScreen({ pickedNumber, onGameOver }) {
   const initialNumber = generateRandomNumber(1, 100, pickedNumber);
   const [guessNumber, setGuessNumber] = useState(initialNumber);
+  const [guessLogs, setGuessLogs] = useState([initialNumber]);
+
+  useEffect(() => {
+    minBoundary = 1;
+    maxBoundary = 100;
+  }, []);
 
   useEffect(() => {
     if (guessNumber === pickedNumber) {
-      onGameOver();
+      onGameOver(guessLogs.length);
     }
   }, [guessNumber, pickedNumber, onGameOver]);
 
@@ -50,6 +57,7 @@ export default function GameScreen({ pickedNumber, onGameOver }) {
 
     const random = generateRandomNumber(minBoundary, maxBoundary, guessNumber);
     setGuessNumber(random);
+    setGuessLogs((logs) => [random, ...logs]);
   }
 
   return (
@@ -70,6 +78,18 @@ export default function GameScreen({ pickedNumber, onGameOver }) {
           </View>
         </View>
       </Card>
+      <View style={styles.logsContainer}>
+        <FlatList
+          data={guessLogs}
+          renderItem={(data) => (
+            <GuessLogItem
+              roundsNumber={guessLogs.length - data.index}
+              guessNumber={data.item}
+            />
+          )}
+          keyExtractor={(item) => item}
+        />
+      </View>
     </View>
   );
 }
@@ -89,5 +109,9 @@ const styles = StyleSheet.create({
   },
   cardTitle: {
     marginBottom: 8,
+  },
+  logsContainer: {
+    flex: 1,
+    padding: 16,
   },
 });
