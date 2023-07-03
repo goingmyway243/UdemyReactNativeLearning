@@ -1,5 +1,12 @@
 import { useEffect, useState } from "react";
-import { Alert, FlatList, StyleSheet, Text, View } from "react-native";
+import {
+  Alert,
+  FlatList,
+  StyleSheet,
+  Text,
+  useWindowDimensions,
+  View,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Card from "../components/Card";
 import GuessNumber from "../components/GuessNumber";
@@ -24,6 +31,8 @@ export default function GameScreen({ pickedNumber, onGameOver }) {
   const initialNumber = generateRandomNumber(1, 100, pickedNumber);
   const [guessNumber, setGuessNumber] = useState(initialNumber);
   const [guessLogs, setGuessLogs] = useState([initialNumber]);
+
+  const { width, height } = useWindowDimensions();
 
   useEffect(() => {
     minBoundary = 1;
@@ -60,24 +69,49 @@ export default function GameScreen({ pickedNumber, onGameOver }) {
     setGuessLogs((logs) => [random, ...logs]);
   }
 
-  return (
-    <View style={styles.screenContainer}>
-      <Title>Opponent's Guess</Title>
-      <GuessNumber>{guessNumber}</GuessNumber>
-      <Card title="Higher or Lower?">
-        <View style={styles.buttonContainer}>
+  let content =
+    height > width ? (
+      <>
+        <GuessNumber>{guessNumber}</GuessNumber>
+        <Card title="Higher or Lower?">
+          <View style={styles.buttonContainer}>
+            <View style={styles.primaryButton}>
+              <PrimaryButton onPress={nextGuessNumber.bind(this, "lower")}>
+                <Ionicons name="md-remove" size={24} color={"white"} />
+              </PrimaryButton>
+            </View>
+            <View style={styles.primaryButton}>
+              <PrimaryButton onPress={() => nextGuessNumber("higher")}>
+                <Ionicons name="md-add" size={24} color={"white"} />
+              </PrimaryButton>
+            </View>
+          </View>
+        </Card>
+      </>
+    ) : (
+      <>
+        <View style={styles.landscapeContainer}>
           <View style={styles.primaryButton}>
             <PrimaryButton onPress={nextGuessNumber.bind(this, "lower")}>
               <Ionicons name="md-remove" size={24} color={"white"} />
             </PrimaryButton>
           </View>
+          <GuessNumber>{guessNumber}</GuessNumber>
           <View style={styles.primaryButton}>
             <PrimaryButton onPress={() => nextGuessNumber("higher")}>
               <Ionicons name="md-add" size={24} color={"white"} />
             </PrimaryButton>
           </View>
         </View>
-      </Card>
+      </>
+    );
+
+  return (
+    <View
+      style={[styles.screenContainer, { marginTop: height > width ? 40 : 20 }]}
+    >
+      <Title>Opponent's Guess</Title>
+      {content}
       <View style={styles.logsContainer}>
         <FlatList
           data={guessLogs}
@@ -98,7 +132,6 @@ const styles = StyleSheet.create({
   screenContainer: {
     flex: 1,
     padding: 40,
-    marginTop: 40,
   },
   buttonContainer: {
     flexDirection: "row",
@@ -113,5 +146,9 @@ const styles = StyleSheet.create({
   logsContainer: {
     flex: 1,
     padding: 16,
+  },
+  landscapeContainer: {
+    flexDirection: "row",
+    alignItems: "center",
   },
 });

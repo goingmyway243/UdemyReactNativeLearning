@@ -8,6 +8,7 @@ import Colors from "./utils/colors";
 import GameOverScreen from "./screens/GameOverScreen";
 import { useFonts } from "expo-font";
 import AppLoading from "expo-app-loading";
+import ExpoStatusBar from "expo-status-bar/build/ExpoStatusBar";
 
 export default function App() {
   const [pickedNumber, setPickedNumber] = useState();
@@ -69,6 +70,7 @@ export default function App() {
       >
         <SafeAreaView style={styles.rootContainer}>{screen}</SafeAreaView>
       </ImageBackground>
+      <ExpoStatusBar style="auto"></ExpoStatusBar>
     </LinearGradient>
   );
 }
