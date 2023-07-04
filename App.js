@@ -1,13 +1,14 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
 import { StatusBar } from "expo-status-bar";
+import CategoriesScreen from "./screens/categories-screen";
 
 export default function App() {
   return (
-    <View style={styles.rootContainer}>
-      <Text>Hello World!</Text>
-      <StatusBar style="auto"></StatusBar>
-    </View>
+    <>
+      <StatusBar style="light"></StatusBar>
+      <CategoriesScreen />
+    </>
   );
 }
 
