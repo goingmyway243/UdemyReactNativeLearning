@@ -1,6 +1,6 @@
 import { Platform, Pressable, StyleSheet, Text, View } from "react-native";
 
-export default function CategoryItem({ title, color }) {
+export default function CategoryItem({ title, color, onPress }) {
   return (
     <View style={[styles.container, styles.itemContainer]}>
       <Pressable
@@ -9,6 +9,7 @@ export default function CategoryItem({ title, color }) {
           pressed ? styles.buttonPressed : null,
         ]}
         android_ripple={{ color: "#ccc" }}
+        onPress={onPress}
       >
         <View
           style={[
