@@ -1,11 +1,20 @@
 import { StyleSheet, Text, View } from "react-native";
 
-export default function DetailItem({ duration, complexity, affordability }) {
+export default function DetailItem({
+  duration,
+  complexity,
+  affordability,
+  textStyle,
+}) {
   return (
     <View style={styles.container}>
-      <Text style={styles.detailText}>{duration}</Text>
-      <Text style={styles.detailText}>{complexity.toUpperCase()}</Text>
-      <Text style={styles.detailText}>{affordability.toUpperCase()}</Text>
+      <Text style={[styles.detailText, textStyle]}>{duration}</Text>
+      <Text style={[styles.detailText, textStyle]}>
+        {complexity.toUpperCase()}
+      </Text>
+      <Text style={[styles.detailText, textStyle]}>
+        {affordability.toUpperCase()}
+      </Text>
     </View>
   );
 }
@@ -15,7 +24,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    padding: 8,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
   },
   detailText: {
     fontSize: 12,
