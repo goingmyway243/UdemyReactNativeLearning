@@ -1,27 +1,40 @@
-import { useLayoutEffect } from "react";
+import { useContext, useLayoutEffect } from "react";
 import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import DetailItem from "../components/detail-item";
 import List from "../components/detail-screen/list";
 import Subtitle from "../components/detail-screen/subtitle";
 import IconButton from "../components/icon-button";
 import { MEALS } from "../data/dummy-data";
+import { FavoriteContext } from "../store/context/FavoriteContext";
 
 export default function DetailScreen({ route, navigation }) {
   const { mealId } = route.params;
 
+  const favContext = useContext(FavoriteContext);
+
   const mealItem = MEALS.find((meal) => meal.id === mealId);
 
-  function onMarkingPressHandler() {
-    console.log("marked!");
+  const isFavMeal = favContext.ids.includes(mealId);
+
+  function onFavoritePressHandler() {
+    if (isFavMeal) {
+      favContext.removeFavorite(mealId);
+    } else {
+      favContext.addFavorite(mealId);
+    }
   }
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <IconButton name="star" color="white" onPress={onMarkingPressHandler} />
+        <IconButton
+          name={isFavMeal ? "star" : "star-outline"}
+          color="white"
+          onPress={onFavoritePressHandler}
+        />
       ),
     });
-  }, [navigation, onMarkingPressHandler]);
+  }, [navigation, onFavoritePressHandler]);
 
   return (
     <ScrollView style={styles.rootContainer}>
