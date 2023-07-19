@@ -1,53 +1,50 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { StatusBar } from "expo-status-bar";
-import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import CategoriesScreen from "./screens/categories-screen";
-import OverviewScreen from "./screens/overview-screen";
-import DetailScreen from "./screens/detail-screen";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import FavoriteScreen from "./screens/favorite-screen";
+import { NavigationContainer } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
-import FavoriteContentProvider from "./store/context/FavoriteContext";
+import ManageExpenseScreen from "./screens/manage-expense-screen";
+import AllExpensesScreen from "./screens/all-expenses-screen";
+import RecentExpensesScreen from "./screens/recent-expenses-screen";
+import { GlobalStyles } from "./constants/styles";
 
 const Stack = createNativeStackNavigator();
 const BottomTab = createBottomTabNavigator();
 
-function BottomTabNavigation() {
+function NestedBottomBarNavigation() {
   return (
     <BottomTab.Navigator
       screenOptions={{
-        headerStyle: { backgroundColor: "saddlebrown" },
+        headerStyle: {
+          backgroundColor: GlobalStyles.colors.primary500,
+        },
         headerTintColor: "white",
-        tabBarStyle: { backgroundColor: "saddlebrown" },
-        tabBarActiveTintColor: "burlywood",
-        tabBarLabelPosition: "beside-icon",
-      }}
-      sceneContainerStyle={{
-        backgroundColor: "rosybrown",
+        tabBarStyle: { backgroundColor: GlobalStyles.colors.primary500 },
+        tabBarActiveTintColor: GlobalStyles.colors.accent500,
       }}
     >
       <BottomTab.Screen
-        name="MealsCategory"
-        component={CategoriesScreen}
+        name="recent-expenses"
+        component={RecentExpensesScreen}
         options={{
-          headerTitle: "All Categories",
+          title: "Recent Expenses",
+          tabBarLabel: "Recent Expenses",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons size={size} color={color} name="list" />
+            <Ionicons name="hourglass" color={color} size={size} />
           ),
-          tabBarLabel: "Categories",
         }}
       />
       <BottomTab.Screen
-        name="MealsFavorite"
-        component={FavoriteScreen}
+        name="all-expenses"
+        component={AllExpensesScreen}
         options={{
-          headerTitle: "My Favorites",
+          title: "All Expenses",
+          tabBarLabel: "All Expenses",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons size={size} color={color} name="star" />
+            <Ionicons name="calendar" color={color} size={size} />
           ),
-          tabBarLabel: "Favorites",
         }}
       />
     </BottomTab.Navigator>
@@ -58,27 +55,18 @@ export default function App() {
   return (
     <>
       <StatusBar style="light"></StatusBar>
-      <FavoriteContentProvider>
-        <NavigationContainer>
-          <Stack.Navigator
-            screenOptions={{
-              headerStyle: { backgroundColor: "saddlebrown" },
-              headerTintColor: "white",
-              contentStyle: { backgroundColor: "rosybrown" },
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="overview-expenses"
+            component={NestedBottomBarNavigation}
+            options={{
+              headerShown: false,
             }}
-          >
-            <Stack.Screen
-              name="Home"
-              component={BottomTabNavigation}
-              options={{
-                headerShown: false,
-              }}
-            />
-            <Stack.Screen name="MealsOverview" component={OverviewScreen} />
-            <Stack.Screen name="MealsDetail" component={DetailScreen} />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </FavoriteContentProvider>
+          />
+          <Stack.Screen name="manage-expense" component={ManageExpenseScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
     </>
   );
 }
