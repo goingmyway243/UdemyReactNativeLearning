@@ -9,11 +9,14 @@ import ManageExpenseScreen from "./screens/manage-expense-screen";
 import AllExpensesScreen from "./screens/all-expenses-screen";
 import RecentExpensesScreen from "./screens/recent-expenses-screen";
 import { GlobalStyles } from "./constants/styles";
+import IconButton from "./components/IconButton";
 
 const Stack = createNativeStackNavigator();
 const BottomTab = createBottomTabNavigator();
 
 function NestedBottomBarNavigation() {
+  function onAddingExpensesHandler() {}
+
   return (
     <BottomTab.Navigator
       screenOptions={{
@@ -23,6 +26,14 @@ function NestedBottomBarNavigation() {
         headerTintColor: "white",
         tabBarStyle: { backgroundColor: GlobalStyles.colors.primary500 },
         tabBarActiveTintColor: GlobalStyles.colors.accent500,
+        headerRight: ({ tintColor }) => (
+          <IconButton
+            color={tintColor}
+            size={24}
+            icon={"add"}
+            onPress={onAddingExpensesHandler}
+          />
+        ),
       }}
     >
       <BottomTab.Screen
