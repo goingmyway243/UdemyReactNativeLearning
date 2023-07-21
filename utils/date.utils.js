@@ -3,3 +3,9 @@ export function FormatDate(date) {
     date.getMonth() + 1
   ).padStart(2, "0")}-${date.getFullYear()}`;
 }
+
+export function GetDateMinusDays(date, day) {
+  return new Date(
+    `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate() - day}`
+  );
+}
