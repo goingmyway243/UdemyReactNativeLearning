@@ -20,17 +20,11 @@ export default function ManageExpenseScreen({ navigation, route }) {
     navigation.goBack();
   }
 
-  function confirmHandler() {
-    const testData = {
-      description: "Test!!!",
-      amount: 19.99,
-      date: new Date(),
-    };
-
+  function submitHandler(expenseData) {
     if (expenseId) {
-      expenseContext.updateExpense(expenseId, testData);
+      expenseContext.updateExpense(expenseId, expenseData);
     } else {
-      expenseContext.addExpense(testData);
+      expenseContext.addExpense(expenseData);
     }
     navigation.goBack();
   }
@@ -42,19 +36,11 @@ export default function ManageExpenseScreen({ navigation, route }) {
 
   return (
     <View style={styles.container}>
-      <ExpenseForm />
-      <View style={styles.buttonContainer}>
-        <CustomButton
-          style={styles.customButton}
-          isFlat={true}
-          onPress={cancelHandler}
-        >
-          Cancel
-        </CustomButton>
-        <CustomButton style={styles.customButton} onPress={confirmHandler}>
-          {expenseId ? "Update" : "Confirm"}
-        </CustomButton>
-      </View>
+      <ExpenseForm
+        submitLabel={expenseId ? "Update" : "Add"}
+        onCancel={cancelHandler}
+        onSubmit={submitHandler}
+      />
       {expenseId && (
         <View style={styles.deleteButton}>
           <IconButton
@@ -74,15 +60,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: GlobalStyles.colors.primary800,
     padding: 24,
-  },
-  buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    padding: 8,
-  },
-  customButton: {
-    minWidth: 100,
-    marginHorizontal: 16,
   },
   deleteButton: {
     borderTopWidth: 2,

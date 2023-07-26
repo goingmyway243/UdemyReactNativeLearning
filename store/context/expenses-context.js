@@ -85,10 +85,11 @@ function expenseReducer(state, action) {
       const editItemIndex = state.findIndex(
         (expense) => expense.id === action.payload.id
       );
-      const editableExpenses = [...state];
       const editableExpense = state[editItemIndex];
       const editItem = { ...editableExpense, ...action.payload.data };
-      return (editableExpenses[editItemIndex] = editItem);
+      const editableExpenses = [...state];
+      editableExpenses[editItemIndex] = editItem;
+      return editableExpenses;
     case "DELETE":
       return state.filter((expense) => expense.id !== action.payload);
     default:
