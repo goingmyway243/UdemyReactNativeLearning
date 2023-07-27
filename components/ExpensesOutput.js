@@ -5,7 +5,8 @@ import ExpensesSummary from "./ExpensesSummary";
 
 export default function ExpensesOutput({ expenses, periodName, fallbackText }) {
   let content = <ExpensesList expenses={expenses} />;
-  if (expenses.lenght === 0) {
+
+  if (expenses.length === 0) {
     content = <Text style={styles.fallbackText}>{fallbackText}</Text>;
   }
 

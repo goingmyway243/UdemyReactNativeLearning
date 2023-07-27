@@ -1,7 +1,5 @@
 export function FormatDate(date) {
-  return `${String(date.getDate()).padStart(2, "0")}-${String(
-    date.getMonth() + 1
-  ).padStart(2, "0")}-${date.getFullYear()}`;
+  return date.toISOString().slice(0, 10);
 }
 
 export function GetDateMinusDays(date, day) {

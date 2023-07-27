@@ -9,6 +9,9 @@ import { ExpensesContext } from "../store/context/expenses-context";
 export default function ManageExpenseScreen({ navigation, route }) {
   const expenseId = route.params?.expenseId;
   const expenseContext = useContext(ExpensesContext);
+  const selectedExpense = expenseContext.expenses.find(
+    (expense) => expense.id === expenseId
+  );
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -40,6 +43,7 @@ export default function ManageExpenseScreen({ navigation, route }) {
         submitLabel={expenseId ? "Update" : "Add"}
         onCancel={cancelHandler}
         onSubmit={submitHandler}
+        defaultValue={selectedExpense}
       />
       {expenseId && (
         <View style={styles.deleteButton}>
