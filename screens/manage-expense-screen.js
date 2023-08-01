@@ -1,15 +1,20 @@
-import { useContext, useLayoutEffect } from "react";
+import { useContext, useLayoutEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import CustomButton from "../components/CustomButton";
+import ErrorOverlay from "../components/ErrorOverlay";
 import ExpenseForm from "../components/ExpenseForm";
 import IconButton from "../components/IconButton";
+import LoadingIndicator from "../components/LoadingIndicator";
 import { GlobalStyles } from "../constants/styles";
 import { ExpensesContext } from "../store/context/expenses-context";
-import { addExpense } from "../utils/http.utils";
+import { addExpense, deleteExpense, updateExpense } from "../utils/http.utils";
 
 export default function ManageExpenseScreen({ navigation, route }) {
   const expenseId = route.params?.expenseId;
   const expenseContext = useContext(ExpensesContext);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState();
+
   const selectedExpense = expenseContext.expenses.find(
     (expense) => expense.id === expenseId
   );
@@ -24,19 +29,41 @@ export default function ManageExpenseScreen({ navigation, route }) {
     navigation.goBack();
   }
 
-  function submitHandler(expenseData) {
-    if (expenseId) {
-      expenseContext.updateExpense(expenseId, expenseData);
-    } else {
-      addExpense(expenseData);
-      expenseContext.addExpense(expenseData);
+  async function submitHandler(expenseData) {
+    try {
+      setIsLoading(true);
+      if (expenseId) {
+        expenseContext.updateExpense(expenseId, expenseData);
+        updateExpense(expenseId, expenseData);
+      } else {
+        const id = await addExpense(expenseData);
+        expenseContext.addExpense({ ...expenseData, id: id });
+      }
+      navigation.goBack();
+    } catch (err) {
+      setError("Cannot save expense - try again!");
+      setIsLoading(false);
     }
-    navigation.goBack();
   }
 
   function deleteHandler() {
-    expenseContext.deleteExpense(expenseId);
-    navigation.goBack();
+    try {
+      setIsLoading(true);
+      expenseContext.deleteExpense(expenseId);
+      deleteExpense(expenseId);
+      navigation.goBack();
+    } catch (err) {
+      setError("Cannot delete expense - try again!");
+      setIsLoading(false);
+    }
+  }
+
+  if (isLoading) {
+    return <LoadingIndicator />;
+  }
+
+  if (error && !isLoading) {
+    return <ErrorOverlay message={error} onConfirm={() => setError(null)} />;
   }
 
   return (

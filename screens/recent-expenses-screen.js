@@ -1,17 +1,27 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
+import ErrorOverlay from "../components/ErrorOverlay";
 import ExpensesOutput from "../components/ExpensesOutput";
+import LoadingIndicator from "../components/LoadingIndicator";
 import { ExpensesContext } from "../store/context/expenses-context";
 import { GetDateMinusDays } from "../utils/date.utils";
 import { fetchExpenses } from "../utils/http.utils";
 
 export default function RecentExpensesScreen() {
   const expenseContext = useContext(ExpensesContext);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState();
   const today = new Date();
 
   useEffect(() => {
     async function getExpenses() {
-      const expensesData = await fetchExpenses();
-      expenseContext.setExpenses(expensesData);
+      try {
+        setIsLoading(true);
+        const expensesData = await fetchExpenses();
+        expenseContext.setExpenses(expensesData);
+      } catch (err) {
+        setError("Cannot fecth expenses - try again!");
+      }
+      setIsLoading(false);
     }
 
     getExpenses();
@@ -19,8 +29,17 @@ export default function RecentExpensesScreen() {
 
   const recentExpenses = expenseContext.expenses.filter(
     (expense) =>
-      expense.date >= GetDateMinusDays(today, 7) && expense.date <= today
+      expense.date.getTime() >= GetDateMinusDays(today, 7).getTime() &&
+      expense.date.getTime() <= today.getTime()
   );
+
+  if (isLoading) {
+    return <LoadingIndicator />;
+  }
+
+  if (error && !isLoading) {
+    return <ErrorOverlay message={error} onConfirm={() => setError(null)} />;
+  }
 
   return (
     <ExpensesOutput

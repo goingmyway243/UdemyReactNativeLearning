@@ -3,7 +3,5 @@ export function FormatDate(date) {
 }
 
 export function GetDateMinusDays(date, day) {
-  return new Date(
-    `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate() - day}`
-  );
+  return new Date(date - day * 24 * 60 * 60 * 1000);
 }
