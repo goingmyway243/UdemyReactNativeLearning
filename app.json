@@ -4,7 +4,6 @@
     "slug": "UdemyReactNativeLearning",
     "version": "1.0.0",
     "orientation": "default",
-    "backgroundColor": "#240800",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
