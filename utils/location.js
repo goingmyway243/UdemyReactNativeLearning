@@ -14,5 +14,9 @@ export async function getAddress(lat, lgt) {
   }
 
   const data = await response.json();
+  if (data.results.length === 0) {
+    return `latitude: ${lat}, longtitude: ${lgt}`;
+  }
+
   return data.results[0].formatted_address;
 }
