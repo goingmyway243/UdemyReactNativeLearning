@@ -1,20 +1,17 @@
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import PlaceList from "../components/place-list";
+import { dbFetchPlaces } from "../utils/database";
 
-export default function AllPlacesScreen({ route }) {
+export default function AllPlacesScreen() {
   const [loadedPlaces, setLoadedPlaces] = useState([]);
 
-  useLayoutEffect(() => {
-    if (route.params) {
-      setLoadedPlaces((currentPlaces) => {
-        if (!currentPlaces.includes(route.params.place)) {
-          return [...currentPlaces, route.params.place];
-        }
-        return currentPlaces;
-      });
-    }
-  }, [route]);
+  useEffect(() => {
+    dbFetchPlaces().then(
+      (places) => setLoadedPlaces(places),
+      (error) => console.log(error)
+    );
+  }, []);
 
   return (
     <View style={styles.container}>

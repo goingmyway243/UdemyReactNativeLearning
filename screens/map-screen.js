@@ -3,7 +3,7 @@ import { Alert, StyleSheet } from "react-native";
 import { useLayoutEffect, useState } from "react";
 import IconButton from "../components/icon-button";
 
-export default function MapScreen({ navigation }) {
+export default function MapScreen({ navigation, route }) {
   const region = {
     latitude: 10.729,
     longitude: 106.643,
@@ -11,9 +11,16 @@ export default function MapScreen({ navigation }) {
     longitudeDelta: 0.0421,
   };
 
-  const [pickedLocation, setPickedLocation] = useState();
+  const initialPlace = route.params && {
+    lat: route.params.initialLat,
+    lgt: route.params.initialLgt,
+  };
+
+  const [pickedLocation, setPickedLocation] = useState(initialPlace);
 
   useLayoutEffect(() => {
+    if (initialPlace) return;
+
     navigation.setOptions({
       headerRight: ({ tintColor }) => {
         return (
@@ -29,6 +36,8 @@ export default function MapScreen({ navigation }) {
   }, [navigation, onSaveLocationHandler]);
 
   function onSelectLocationHandler(event) {
+    if (initialPlace) return;
+
     const lat = event.nativeEvent.coordinate.latitude;
     const lgt = event.nativeEvent.coordinate.longitude;
 

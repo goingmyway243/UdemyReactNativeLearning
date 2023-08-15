@@ -1,8 +1,10 @@
 import PlaceForm from "../components/place-form";
+import { dbInsertPlace } from "../utils/database";
 
 export default function AddPlaceScreen({ navigation }) {
-  function onCreateNewPlaceHandler(place) {
-    navigation.navigate("all-places", { place: place });
+  async function onCreateNewPlaceHandler(place) {
+    await dbInsertPlace(place);
+    navigation.navigate("all-places");
   }
 
   return <PlaceForm onCreateNewPlace={onCreateNewPlaceHandler} />;
