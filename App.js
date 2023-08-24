@@ -1,4 +1,4 @@
-import { Button, StyleSheet, Text, View } from "react-native";
+import { Button, Platform, StyleSheet, Text, View } from "react-native";
 import * as Notifications from "expo-notifications";
 import { useEffect } from "react";
 
@@ -14,6 +14,30 @@ Notifications.setNotificationHandler({
 
 export default function App() {
   useEffect(() => {
+    async function configNotification() {
+      const { status } = await Notifications.getPermissionsAsync();
+      let finalPermissons = status;
+
+      if (status !== "granted") {
+        finalPermissons = await Notifications.requestPermissionsAsync();
+      }
+
+      if (status !== "granted") {
+        return;
+      }
+
+      Notifications.getExpoPushTokenAsync().then((token) => console.log(token));
+
+      if (Platform.OS === "android") {
+        await Notifications.setNotificationChannelAsync("default", {
+          importance: Notifications.AndroidImportance.DEFAULT,
+          name: "default",
+        });
+      }
+    }
+
+    configNotification();
+
     const subscription = Notifications.addNotificationReceivedListener(
       (notification) => {
         console.log("NOTIFICATION RECEIVED!");
